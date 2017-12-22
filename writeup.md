@@ -39,12 +39,14 @@ Below you can see how the various line segments are merged and extrapolated to c
 ### 2. Identify potential shortcomings with your current pipeline
 
 The largest potential shortcoming of the improved pipeline is that it doesn't do a particularly good job of filtering out
-spurious lines. 
+spurious lines `filter_lines()`. The current implementation is relatively fragile as it just ignores flat-ish lines. I'm not sure exactly when these lines would be valid, but its certainly possible to have other types of line segments which should be ignored in the "averaging and extrapolation." The challenge video exposes some of the problems with this basic filtering approach.
 
 ### 3. Suggest possible improvements to your pipeline
 
+I would focus my attention on the `filter_lines()` function to more sophisticatedly focus on the appropriate, relevant line segments, while ignoring all others.
+
 A possible improvement would be to first split the region of interest into two (left and right), then would ensure any sloped lines that would get batched with the wrong lane line would be ignored appropriately. 
 
-Another potential improvement could be to look for lines of a relatively similar slope only, ignoring ones that are one or two standard deviations away from the norm. That challenge with this approach is that if there are many similarly sloped lines that are not helpful (such as many flat lines), they will influence the mean and variance and not be ejected.
+Another potential improvement could be to look for lines of a relatively similar slope only, ignoring ones that are one or two standard deviations away from the norm. That challenge with this approach is that if there are many similarly sloped lines that are not helpful (such as many flat lines), they will influence the mean and variance and not be ejected. 
 
 Another potential improvement would be to think of the video as a whole rather than each frame without any state. I'm sure there are a bunch of strategies here worth exploring.
